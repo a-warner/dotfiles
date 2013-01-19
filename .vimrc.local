@@ -1,0 +1,7 @@
+:set incsearch
+:set expandtab
+:set softtabstop=2 shiftwidth=2
+:set autoindent
+:colorscheme candycode
+:set tabstop=2
+:set binary

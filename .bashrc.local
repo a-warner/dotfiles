@@ -1,0 +1,10 @@
+[[ -r $rvm_path/scripts/completion ]] && source $rvm_path/scripts/completion
+export HASHROCKET_DIR=/opt/workspace
+source ~/.rvm/scripts/rvm
+export PATH=$PATH:bin/:./node_modules/.bin:/usr/local/share/npm/bin
+
+# python crap
+export WORKON_HOME=$HOME/.virtualenvs
+export PIP_VIRTUALENV_BASE=$WORKON_HOME
+export PIP_RESPECT_VIRTUALENV=true
+source /usr/local/bin/virtualenvwrapper.sh
