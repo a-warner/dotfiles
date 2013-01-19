@@ -143,7 +143,7 @@ for dotfile in .bashrc .vimrc .rvmrc; do
   if [ "$(readlink $HOME/$dotfile_extension)" != "$WORKSPACE_DIR/dotfiles/$dotfile_extension" ]; then
     test -f $HOME/$dotfile_extension && mv $HOME/$dotfile_extension{,.bak}
     test -L $HOME/$dotfile_extension && rm $HOME/$dotfile_extension
-    ln -nfs $WORKSPACE_DIR/dotfile/$dotfile_extension $HOME/
+    ln -nfs $WORKSPACE_DIR/dotfiles/$dotfile_extension $HOME/
   fi
 done
 
