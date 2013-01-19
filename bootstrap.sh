@@ -204,6 +204,7 @@ else
   echo "PostgreSQL already installed"
 fi
 
+source $HOME/.bash_profile
 echo "Finished."
 
 # Copyright (c) 2011 Rogelio J. Samour
