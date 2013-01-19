@@ -122,7 +122,10 @@ git submodule init
 git submodule update
 
 DOTMATRIX_LOCATION=$WORKSPACE_DIR/dotmatrix
-ln -s "$WORKSPACE_DIR/dotfiles/dotmatrix" $DOTMATRIX_LOCATION
+readlink $DOTMATRIX_LOCATION > /dev/null
+if [[ "$?" -ne "0" ]]; then
+  ln -s "$WORKSPACE_DIR/dotfiles/dotmatrix" $DOTMATRIX_LOCATION
+fi
 
 echo "Symlinking dotmatrix dotfiles"
 
