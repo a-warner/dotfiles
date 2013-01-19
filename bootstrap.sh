@@ -138,12 +138,11 @@ for dotfile in .bashrc .vim .vimrc .hashrc; do
   fi
 done
 
-for dotfile in .bashrc .vimrc .rvmrc; do
-  dotfile_extension="$dotfile.local"
-  if [ "$(readlink $HOME/$dotfile_extension)" != "$WORKSPACE_DIR/dotfiles/$dotfile_extension" ]; then
-    test -f $HOME/$dotfile_extension && mv $HOME/$dotfile_extension{,.bak}
-    test -L $HOME/$dotfile_extension && rm $HOME/$dotfile_extension
-    ln -nfs $WORKSPACE_DIR/dotfiles/$dotfile_extension $HOME/
+for dotfile in .bashrc.local .vimrc.local .rvmrc.local .irbrc .pryrc .railsrc; do
+  if [ "$(readlink $HOME/$dotfile)" != "$WORKSPACE_DIR/dotfiles/$dotfile" ]; then
+    test -f $HOME/$dotfile && mv $HOME/$dotfile{,.bak}
+    test -L $HOME/$dotfile && rm $HOME/$dotfile
+    ln -nfs $WORKSPACE_DIR/dotfiles/$dotfile $HOME/
   fi
 done
 
