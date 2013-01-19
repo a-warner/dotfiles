@@ -61,8 +61,9 @@ else
 fi
 
 echo "Checking java installation; please follow any prompts to install"
-java # I'm pretty sure this just installs java if it's not installed
-     # TODO: fix this if it doesn't work on a new machine
+java 2>&1 > /dev/null
+# I'm pretty sure this just installs java if it's not installed
+# TODO: fix this if it doesn't work on a new machine
 
 if [ ! -f "$HOME/.ssh/id_rsa.pub" ]; then
   echo "Please enter your email: "
