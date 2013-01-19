@@ -83,8 +83,8 @@ if [[ "$?" -ne "0" ]]; then
 fi
 
 echo "Removing system gems"
-sudo gem update --system > /dev/null
-sudo gem clean > /dev/null
+sudo -i 'gem update --system'
+sudo -i 'gem clean'
 
 grep '. "$HOME/.bashrc"' $HOME/.bash_profile > /dev/null
 if [[ "$?" -ne "0" ]]; then
