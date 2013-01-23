@@ -101,7 +101,7 @@ if ! command -v brew > /dev/null; then
 fi
 
 echo "Homebrew is standard packages..."
-for app in ack ctags-exuberant imagemagick macvim markdown proctools wget grep hub ngrep git; do
+for app in ack ctags-exuberant imagemagick macvim markdown proctools wget grep hub ngrep git node; do
   brew list $app > /dev/null
   if [[ "$?" -eq "1" ]]; then
     brew install $app
