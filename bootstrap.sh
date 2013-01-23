@@ -13,7 +13,8 @@
 #   your own risk.
 # License: See below
 
-if [ ! -f "/Developer/Library/uninstall-devtools" ]; then
+xcode-select --print-path &> /dev/null
+if [ ["$?" -ne "0"] -a [! -f "/Developer/Library/uninstall-devtools"] ]; then
   read -p "Please install Xcode and re-run this script"
   exit 0
 fi
