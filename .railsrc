@@ -33,3 +33,26 @@ if Object.const_defined?('IRB')
 else
   after_rails_loaded.call
 end
+
+def benchmark(&block)
+  require 'benchmark'
+  Benchmark.bm {|x| x.report(&block) }
+end
+
+class String
+  def clip
+    `echo "#{self}" | pbcopy`
+  end
+end
+
+def add_debugger(clazz, method)
+  unless clazz.method_defined? "#{method}_with_debugger"
+    clazz.class_eval <<-CODE, __FILE__, __LINE__
+      def #{method}_with_debugger(*args, &block)
+        debugger
+        #{method}_without_debugger(*args, &block)
+      end
+      alias_method_chain :#{method}, :debugger
+    CODE
+  end
+end
