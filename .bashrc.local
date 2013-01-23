@@ -1,6 +1,5 @@
 [[ -r $rvm_path/scripts/completion ]] && source $rvm_path/scripts/completion
-export HASHROCKET_DIR=/opt/workspace
-source ~/.rvm/scripts/rvm
+if [[ -s "$HOME/.rvm/scripts/rvm" ]] ; then source "$HOME/.rvm/scripts/rvm" ; fi
 export PATH=$PATH:bin/:./node_modules/.bin:/usr/local/share/npm/bin
 
 # python crap
@@ -8,3 +7,51 @@ export WORKON_HOME=$HOME/.virtualenvs
 export PIP_VIRTUALENV_BASE=$WORKON_HOME
 export PIP_RESPECT_VIRTUALENV=true
 test -f /usr/local/bin/virtualenvwrapper.sh && source /usr/local/bin/virtualenvwrapper.sh
+
+r () {
+  local SCRIPT_NAME=$1
+  shift
+  if [[ -f script/$SCRIPT_NAME ]]; then
+    script/$SCRIPT_NAME $@
+  else
+    echo "No script at script/$SCRIPT_NAME"
+  fi
+}
+complete -o default -W "\$(ls script)" r
+
+alias srvm="source .rvmrc"
+alias gsp="git stash pop"
+alias gs="git stash"
+alias grpe=grep
+alias rdm="rake db:migrate"
+alias rdr="rake db:rollback"
+
+# pushes a new branch to origin, sets it up to track
+# the remote
+gpnb() {
+  if [ -n "$(git rev-parse --git-dir 2>/dev/null)" ]; then
+    local b="$(git symbolic-ref HEAD 2>/dev/null)"
+    if [ -n "$b" ]; then
+      local branch="${b##refs/heads/}"
+      if [ "$branch" == "master" ]; then
+        echo "Current branch is master...nothing to do."
+      else
+        t="$(git config branch.$branch.remote 2>/dev/null)"
+        if [ -n "$t" ]; then
+          echo "Branch $branch already set up to track remote \"$t\" ...nothing to do"
+        else
+          echo "Pushing $branch to origin and setting it up to track remote"
+          local cmd="git push -u origin $branch"
+          $cmd
+        fi
+      fi
+    else
+      echo "Unable to determine current branch; the git repo may be in a bad state"
+      exit 1
+    fi
+  else
+    echo "Not in a git dir...exiting."
+  fi
+}
+
+complete -o default -W "\$(git branch 2>/dev/null | cut -c 3-)" git gco
