@@ -3,25 +3,33 @@ if ENV.include?('RAILS_ENV') && !Object.const_defined?('RAILS_DEFAULT_LOGGER')
   RAILS_DEFAULT_LOGGER = Logger.new(STDOUT)
 end
 
-if defined? Rails
-  ActiveRecord::Base.logger = Logger.new(STDOUT)
-end
+app_reference = defined?(app) && app
 
-app_reference = app
+after_rails_loaded = lambda do |*args|
+  if defined? Rails
+    ActiveRecord::Base.logger = Logger.new(STDOUT)
+  end
 
-if defined? ActiveRecord::Base
-  ActiveRecord::Base.class_eval do
-    define_method(:navigate) do |*args|
-      base_url = args.first || 'http://localhost:3000'
+  if defined? ActiveRecord::Base
+    ActiveRecord::Base.class_eval do
+      define_method(:navigate) do |*args|
+        base_url = args.first || 'http://localhost:3000'
 
-      if respond_to? :path
-        object_path = path
-      elsif app_reference.respond_to?("#{self.class.name.downcase}_path")
-        object_path = app_reference.send("#{self.class.name.downcase}_path", self)
-      else
-        object_path = app_reference.url_for(self).sub(/^https?:\/\/[^\/]+/,'')
+        if respond_to? :path
+          object_path = path
+        elsif app_reference.respond_to?("#{self.class.name.downcase}_path")
+          object_path = app_reference.send("#{self.class.name.downcase}_path", self)
+        else
+          object_path = app_reference.url_for(self).sub(/^https?:\/\/[^\/]+/,'')
+        end
+        system('open', "#{base_url + object_path}")
       end
-      `open #{base_url + object_path}`
     end
   end
+end
+
+if Object.const_defined?('IRB')
+  IRB.conf[:IRB_RC] = after_rails_loaded
+else
+  after_rails_loaded.call
 end
