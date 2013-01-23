@@ -39,6 +39,20 @@ def benchmark(&block)
   Benchmark.bm {|x| x.report(&block) }
 end
 
+def show_log
+  change_log(STDOUT)
+end
+
+def hide_log
+  change_log(nil)
+end
+
+def change_log(stream, colorize=true)
+  ActiveRecord::Base.logger = ::Logger.new(stream)
+  ActiveRecord::Base.clear_all_connections!
+  ActiveRecord::Base.colorize_logging = colorize
+end
+
 class String
   def clip
     `echo "#{self}" | pbcopy`
