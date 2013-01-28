@@ -3,9 +3,9 @@ if ENV.include?('RAILS_ENV') && !Object.const_defined?('RAILS_DEFAULT_LOGGER')
   RAILS_DEFAULT_LOGGER = Logger.new(STDOUT)
 end
 
-app_reference = defined?(app) && app
-
 after_rails_loaded = lambda do |*args|
+  app_reference = defined?(app) && app
+
   if defined? Rails
     ActiveRecord::Base.logger = Logger.new(STDOUT)
   end
