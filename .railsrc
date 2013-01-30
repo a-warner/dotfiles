@@ -5,6 +5,7 @@ end
 
 after_rails_loaded = lambda do |*args|
   app_reference = defined?(app) && app
+  DJ = Delayed::Job if defined?(Delayed::Job)
 
   if defined? Rails
     ActiveRecord::Base.logger = Logger.new(STDOUT)
