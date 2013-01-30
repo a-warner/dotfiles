@@ -25,6 +25,7 @@ alias gs="git stash"
 alias grpe=grep
 alias rdm="rake db:migrate"
 alias rdr="rake db:rollback"
+alias gphm="git push heroku master"
 
 # pushes a new branch to origin, sets it up to track
 # the remote
