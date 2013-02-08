@@ -26,6 +26,16 @@ after_rails_loaded = lambda do |*args|
         system('open', "#{base_url + object_path}")
       end
     end
+
+    clazz = User rescue nil # rails auto-loading
+    if clazz && User.respond_to?(:find_by_login)
+      User.class_eval do
+        def self.andrew; find_by_login 'awarner'; end
+      end
+
+      def andrew; User.andrew; end
+      alias :me :andrew
+    end
   end
 end
 
