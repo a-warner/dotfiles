@@ -72,6 +72,10 @@ def add_debugger(clazz, method)
   end
 end
 
+def debug_sql_calls(clazz, method = :find_by_sql)
+  add_debugger(class << clazz; self; end, :find_by_sql)
+end
+
 def benchmark_url(url, attempts = 100)
   total = 0.0
   attempts.times do |i|
