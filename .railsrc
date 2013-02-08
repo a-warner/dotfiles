@@ -29,11 +29,7 @@ after_rails_loaded = lambda do |*args|
 
     clazz = User rescue nil # rails auto-loading
     if clazz && User.respond_to?(:find_by_login)
-      User.class_eval do
-        def self.andrew; find_by_login 'awarner'; end
-      end
-
-      def andrew; User.andrew; end
+      def andrew; User.find_by_login('awarner'); end
       alias :me :andrew
     end
   end
