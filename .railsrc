@@ -9,6 +9,16 @@ after_rails_loaded = lambda do |*args|
     DJ = Delayed::Job
     DJ.class_eval do
       def run; run_with_lock(1, 1); end
+
+      class << self
+        def method_histogram
+          all.map(&:payload_object).map(&:method).to_ordered_histogram
+        end
+
+        def dump
+          all.map(&:payload_object)
+        end
+      end
     end
   end
 
