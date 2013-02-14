@@ -1,10 +1,10 @@
 :set incsearch
-:set expandtab
 :set softtabstop=2 shiftwidth=2
 :set autoindent
 :colorscheme candycode
 :set tabstop=2
 :set binary
+:set expandtab
 
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip
 let g:ctrlp_map = '<c-t>'
