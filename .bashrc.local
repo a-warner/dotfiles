@@ -56,3 +56,8 @@ gpnb() {
 }
 
 complete -o default -W "\$(git branch 2>/dev/null | cut -c 3-)" git gco
+
+restart_memcached() {
+  ps -ef | grep memcached | grep -v grep | awk '{print $2}' | xargs -I {} kill -9 {}
+  memcached -d -m 1024
+}
