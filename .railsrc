@@ -106,10 +106,12 @@ class String
 end
 
 def add_debugger(clazz, method)
+  debugger_method = binding.respond_to?(:pry) ? 'binding.pry' : 'debugger'
+
   unless clazz.method_defined? "#{method}_with_debugger"
-    clazz.class_eval <<-CODE, __FILE__, __LINE__
+    clazz.class_eval <<-CODE, __FILE__, __LINE__ + 1
       def #{method}_with_debugger(*args, &block)
-        debugger
+        #{debugger_method}
         #{method}_without_debugger(*args, &block)
       end
       alias_method_chain :#{method}, :debugger
