@@ -119,6 +119,16 @@ def add_debugger(clazz, method)
   end
 end
 
+def remove_debugger(clazz, method)
+  return unless clazz.method_defined? "#{method}_with_debugger"
+
+  clazz.class_eval do
+    alias_method method, "#{method}_without_debugger"
+    undef_method "#{method}_with_debugger"
+    undef_method "#{method}_without_debugger"
+  end
+end
+
 def debug_sql_calls(clazz, method = :find_by_sql)
   add_debugger(class << clazz; self; end, :find_by_sql)
 end
