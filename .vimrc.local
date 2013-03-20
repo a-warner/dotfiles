@@ -6,6 +6,9 @@
 :set binary
 :set expandtab
 
+:map - ddp
+:map _ ddkkp
+
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlP'
