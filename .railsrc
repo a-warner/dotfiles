@@ -101,7 +101,9 @@ end
 
 class String
   def clip
-    `echo "#{self}" | pbcopy`
+    self.tap do
+      `echo "#{self}" | pbcopy`
+    end
   end
 end
 
