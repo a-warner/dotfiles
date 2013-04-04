@@ -8,6 +8,7 @@
 
 :map - ddp
 :map _ ddkkp
+autocmd QuickFixCmdPost *grep* cwindow
 
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip
 let g:ctrlp_map = '<c-p>'
