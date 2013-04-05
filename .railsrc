@@ -136,12 +136,13 @@ def debug_sql_calls(clazz, method = :find_by_sql)
 end
 
 def benchmark_url(url, attempts = 100)
+  require 'benchmark'
+  require 'net/http'
   total = 0.0
   attempts.times do |i|
     doc = nil
     actual_time = (Benchmark.realtime { doc = Net::HTTP.get(URI.parse(url)) }.to_f * 1000).round
-    reported_time = (Hpricot(doc).at('#request_time').inner_text.to_f * 1000).round
-    puts "Trial #{i}: actual_time: #{actual_time}ms, reported_time: #{reported_time}ms"
+    puts "Trial #{i}: actual_time: #{actual_time}ms"
     total += actual_time
   end
   puts "\nTotal time was #{(total / 1000)} seconds, for an average of #{(total / attempts)}ms"
