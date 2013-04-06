@@ -26,6 +26,7 @@ alias grpe=grep
 alias rdm="rake db:migrate"
 alias rdr="rake db:rollback"
 alias gphm="git push heroku master"
+alias reload="source ~/.bash_profile"
 
 # pushes a new branch to origin, sets it up to track
 # the remote
