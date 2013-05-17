@@ -65,6 +65,11 @@ after_rails_loaded = lambda do |*args|
             f.puts "Subject: #{subject}"
             f.puts "Date: #{date}"
             f.puts "To: #{to.to_sentence}"
+            [:cc, :bcc, :reply_to].each do |optional_recipients|
+              if send(optional_recipients)
+                f.puts "#{optional_recipients.to_s.humanize}: #{reply_to.to_sentence}"
+              end
+            end
           f.puts "</pre>"
           f.puts self.body
         end
