@@ -18,6 +18,16 @@ after_rails_loaded = lambda do |*args|
         def dump
           all.map(&:payload_object)
         end
+
+        def creation_summary
+          find_by_sql(<<-SQL).inject([]) { |ary, j| ary << OpenStruct.new(j.attributes); ary }
+            SELECT regexp_matches(handler, E'method: :(.*?)\n') as method,
+                   to_char(created_at, 'YYYY/MM/DD HH24') as created_hour,
+                   count(*) as count
+            FROM delayed_jobs GROUP BY created_hour, method
+            ORDER BY created_hour DESC, count(*) DESC
+          SQL
+        end
       end
     end
   end
