@@ -122,6 +122,10 @@ class String
   end
 end
 
+def decode_session(session)
+  Marshal.load(session.split('--').first.unpack('m').flatten.first)
+end
+
 def add_debugger(clazz, method)
   debugger_method = binding.respond_to?(:pry) ? 'binding.pry' : 'debugger'
 
