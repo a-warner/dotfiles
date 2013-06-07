@@ -22,6 +22,7 @@ complete -o default -W "\$(ls script)" r
 alias srvm="source .rvmrc"
 alias gsp="git stash pop"
 alias gs="git stash"
+alias gpl="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
 alias grpe=grep
 alias igrep="grep -i"
 alias pgrep="grep -P"
