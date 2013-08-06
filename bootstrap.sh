@@ -130,7 +130,7 @@ fi
 
 echo "Symlinking dotmatrix dotfiles"
 
-for dotfile in .bashrc .vim .vimrc .hashrc .inputrc; do
+for dotfile in .bashrc .vim .vimrc .hashrc .inputrc .screenrc; do
   if [ "$(readlink $HOME/$dotfile)" != "$DOTMATRIX_LOCATION/$dotfile" ]; then
     test -d $HOME/$dotfile && mv $HOME/$dotfile{,.bak}
     test -f $HOME/$dotfile && mv $HOME/$dotfile{,.bak}
