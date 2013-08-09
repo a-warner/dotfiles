@@ -62,6 +62,8 @@ after_rails_loaded = lambda do |*args|
   TMail::Mail rescue nil # make sure constant gets autoloaded by rails if necessary
   if defined?(TMail::Mail)
     TMail::Mail.class_eval do
+      def h(*args); ERB::Util.h(*args); end
+
       def show
         emails_dir = "#{Rails.root}/tmp/emails"
         raise "You must first create the tmp/emails directory!" if !File.directory?(emails_dir)
@@ -69,15 +71,16 @@ after_rails_loaded = lambda do |*args|
         mail_path = File.join(emails_dir, "#{object_id}.html")
 
         File.open(mail_path, "w") do |f|
+
           f.puts '<meta http-equiv="Content-type" content="text/html; charset=utf-8"></meta>'
           f.puts "<pre>"
-            f.puts "From: #{from.to_sentence}"
-            f.puts "Subject: #{subject}"
-            f.puts "Date: #{date}"
-            f.puts "To: #{to.to_sentence}"
-            [:cc, :bcc, :reply_to].each do |optional_recipients|
-              if send(optional_recipients)
-                f.puts "#{optional_recipients.to_s.humanize}: #{reply_to.to_sentence}"
+            f.puts h "From: #{self['from']}"
+            f.puts h "Subject: #{subject}"
+            f.puts h "Date: #{date}"
+            f.puts h "To: #{self['to']}"
+            ['cc', 'bcc', 'reply-to'].each do |optional_recipients|
+              if self[optional_recipients].present?
+                f.puts h "#{optional_recipients.to_s.humanize}: #{self[optional_recipients]}"
               end
             end
           f.puts "</pre>"
