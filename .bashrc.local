@@ -24,12 +24,14 @@ alias gsp="git stash pop"
 alias gs="git stash"
 alias gpl="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
 alias grpe=grep
+alias grep='grep --color=auto'
 alias igrep="grep -i"
 alias pgrep="grep -P"
 alias lgrep="grep --line-buffered"
 alias rdm="rake db:migrate"
 alias rdr="rake db:rollback"
 alias gphm="git push heroku master"
+alias gac='gc --amend -Chead'
 alias reload="source ~/.bash_profile"
 alias rjw="rake jobs:work"
 
