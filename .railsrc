@@ -53,9 +53,18 @@ after_rails_loaded = lambda do |*args|
     end
 
     clazz = User rescue nil # rails auto-loading
-    if clazz && User.respond_to?(:find_by_login)
-      def andrew; User.find_by_login('awarner'); end
-      alias :me :andrew
+    if clazz
+      if User.respond_to?(:find_by_login)
+        def andrew; User.find_by_login('awarner'); end
+        alias :me :andrew
+      end
+
+      User.class_eval do
+        def dev_passwordify!(new_password = 'test123')
+          self.password = new_password
+          save!
+        end
+      end
     end
   end
 
