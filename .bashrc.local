@@ -63,6 +63,24 @@ gpnb() {
   fi
 }
 
+getpull() {
+  if [ -z "$1" ]; then
+    echo "Usage: navpull SHA"
+  elif [ -z "$(git rev-parse --git-dir 2>/dev/null)" ]; then
+    echo "Not in a git directory"
+  else
+    local origin_url=$(git config --get remote.origin.url)
+    local pull_base_url=$(ruby -e "print \"https://github.com/\" + \"$origin_url\"[/:(.+)?\.git$/, 1] + \"/pull\"")
+    local pull_id=$(git log $1..master --ancestry-path --merges | grep -oP "#\d+" | tail -n 1 | grep -oP '\d+')
+
+    if [ -n "$pull_id" ]; then
+      echo "$pull_base_url/$pull_id"
+    else
+      echo "Sorry, couldn't find that pull"
+    fi
+  fi
+}
+
 complete -o default -W "\$(git branch 2>/dev/null | cut -c 3-)" git gco
 
 restart_memcached() {
