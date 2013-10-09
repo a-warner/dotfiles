@@ -50,6 +50,13 @@ after_rails_loaded = lambda do |*args|
         end
         system('open', "#{base_url + object_path}")
       end
+
+      def dev_passwordify!(new_password = 'test123')
+        raise "Whoops, can't passwordify this one" unless respond_to?(:password=)
+
+        self.password = new_password
+        save!
+      end
     end
 
     clazz = User rescue nil # rails auto-loading
@@ -57,13 +64,6 @@ after_rails_loaded = lambda do |*args|
       if User.respond_to?(:find_by_login)
         def andrew; User.find_by_login('awarner'); end
         alias :me :andrew
-      end
-
-      User.class_eval do
-        def dev_passwordify!(new_password = 'test123')
-          self.password = new_password
-          save!
-        end
       end
     end
   end
