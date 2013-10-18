@@ -87,6 +87,7 @@ after_rails_loaded = lambda do |*args|
             f.puts h "Subject: #{subject}"
             f.puts h "Date: #{date}"
             f.puts h "To: #{self['to']}"
+            f.puts h "Smtp_envelope_to: #{smtp_envelope_to}" if defined?(smtp_envelope_to)
             ['cc', 'bcc', 'reply-to'].each do |optional_recipients|
               if self[optional_recipients].present?
                 f.puts h "#{optional_recipients.to_s.humanize}: #{self[optional_recipients]}"
