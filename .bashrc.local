@@ -19,6 +19,14 @@ r () {
 }
 complete -o default -W "\$(ls script)" r
 
+rails_env_exec () {
+  if [[ -s "script/dev" ]]; then
+    script/dev run $@
+  else
+    $@
+  fi
+}
+
 alias srvm="source .rvmrc"
 alias gsp="git stash pop"
 alias gs="git stash"
@@ -28,12 +36,12 @@ alias grep='grep --color=auto'
 alias igrep="grep -i"
 alias pgrep="grep -P"
 alias lgrep="grep --line-buffered"
-alias rdm="rake db:migrate"
-alias rdr="rake db:rollback"
+alias rdm="rails_env_exec rake db:migrate"
+alias rdr="rails_env_exec rake db:rollback"
 alias gphm="git push heroku master"
 alias gac='gc --amend -Chead'
 alias reload="source ~/.bash_profile"
-alias rjw="rake jobs:work"
+alias rjw="rails_env_exec rake jobs:work"
 
 # pushes a new branch to origin, sets it up to track
 # the remote

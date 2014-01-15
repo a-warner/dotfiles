@@ -6,4 +6,4 @@ IRB.conf[:SAVE_HISTORY] = 200
 IRB.conf[:HISTORY_FILE] = "#{ENV['HOME']}/.irb-history"
 
 railsrc = File.expand_path('.railsrc', ENV['HOME'])
-load railsrc if File.exist?(railsrc)
+load railsrc if File.exist?(railsrc) || File.symlink?(railsrc)
