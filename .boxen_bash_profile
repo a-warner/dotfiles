@@ -1,3 +1,4 @@
+. "$HOME/.profile"
 export WORKSPACE_DIR=$BOXEN_SRC_DIR
 export HASHROCKET_DIR=$WORKSPACE_DIR
 . "$HOME/.bashrc"
