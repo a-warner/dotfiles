@@ -26,7 +26,6 @@ alias gpl="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset 
 alias grpe=grep
 alias grep='grep --color=auto'
 alias igrep="grep -i"
-alias pgrep="grep -P"
 alias lgrep="grep --line-buffered"
 alias rdm="rake db:migrate"
 alias rdr="rake db:rollback"
