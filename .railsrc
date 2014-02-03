@@ -100,6 +100,13 @@ after_rails_loaded = lambda do |*args|
       end
     end
   end
+
+  def with_smtp_email
+    old_delivery_method, ActionMailer::Base.delivery_method = ActionMailer::Base.delivery_method, :smtp
+    yield
+  ensure
+    ActionMailer::Base.delivery_method = old_delivery_method
+  end
 end
 
 if Object.const_defined?('IRB')
