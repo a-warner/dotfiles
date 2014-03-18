@@ -39,7 +39,10 @@ after_rails_loaded = lambda do |*args|
   if defined? ActiveRecord::Base
     ActiveRecord::Base.class_eval do
       define_method(:navigate) do |*args|
-        base_url = args.first || 'http://localhost:3000'
+        url_options = ActionMailer::Base.default_url_options || (args.first.respond_to?(:default_url_options) && args.first.default_url_options)
+        base_url = args.first ||
+                     (url_options.present? && 'http://' + url_options[:host] + ([443, 80].include?(url_options.fetch(:port, 80)) ? '' : url_options[:port].to_s)) ||
+                     'http://localhost:3000'
 
         if respond_to? :path
           object_path = path
