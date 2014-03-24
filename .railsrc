@@ -137,10 +137,10 @@ def change_log(stream, colorize=true)
   ActiveRecord::Base.colorize_logging = colorize
 end
 
-class String
+class Object
   def clip
-    self.tap do
-      `echo "#{self}" | pbcopy`
+    to_s.tap do |string|
+      IO.popen('pbcopy', 'w') { |io| io << string }
     end
   end
 end
