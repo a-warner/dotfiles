@@ -1,3 +1,5 @@
+require 'tmpdir'
+
 if ENV.include?('RAILS_ENV') && !Object.const_defined?('RAILS_DEFAULT_LOGGER')
   require 'logger'
   RAILS_DEFAULT_LOGGER = Logger.new(STDOUT)
@@ -141,6 +143,21 @@ class Object
   def clip
     to_s.tap do |string|
       IO.popen('pbcopy', 'w') { |io| io << string }
+    end
+  end
+
+  def show_html
+    to_s.tap do |html|
+      file_path = File.join(Dir.tmpdir, "show_html_#{html.object_id}.html")
+
+      File.open(file_path, 'w') do |f|
+        f << '<!DOCTYPE html>'
+        f << '<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head><body>'
+        f << html
+        f << '</body></html>'
+      end
+
+      system("open", "file:///#{file_path}")
     end
   end
 end
