@@ -17,3 +17,6 @@ let g:ctrlp_custom_ignore = {
   \ 'dir': '\v[\/]\.(git|hg|svn)$|node_modules',
   \ 'file': '\v\.(exe|so|dll|DS_Store)$',
   \ }
+
+autocmd FileType ruby setlocal shiftwidth=2 softtabstop=2 expandtab autoindent
+autocmd FileType javascript setlocal shiftwidth=2 softtabstop=2 expandtab autoindent
