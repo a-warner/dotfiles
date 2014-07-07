@@ -80,7 +80,7 @@ after_rails_loaded = lambda do |*args|
 
       def show
         emails_dir = "#{Rails.root}/tmp/emails"
-        raise "You must first create the tmp/emails directory!" if !File.directory?(emails_dir)
+        FileUtils.mkdir_p(emails_dir)
 
         mail_path = File.join(emails_dir, "#{object_id}.html")
 
