@@ -33,6 +33,7 @@ alias gphm="git push heroku master"
 alias gac='gc --amend -Chead'
 alias reload="source ~/.bash_profile"
 alias rjw="rake jobs:work"
+alias d="script/dev"
 
 alias flushdns="sudo killall -HUP mDNSResponder"
 
