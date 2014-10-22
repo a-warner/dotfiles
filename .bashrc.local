@@ -6,7 +6,6 @@ export PATH=$PATH:./node_modules/.bin:/usr/local/share/npm/bin:$WORKSPACE_DIR/do
 export WORKON_HOME=$HOME/.virtualenvs
 export PIP_VIRTUALENV_BASE=$WORKON_HOME
 export PIP_RESPECT_VIRTUALENV=true
-test -f /usr/local/bin/virtualenvwrapper.sh && source /usr/local/bin/virtualenvwrapper.sh
 
 r () {
   local SCRIPT_NAME=$1
