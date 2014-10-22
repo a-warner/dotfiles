@@ -33,6 +33,7 @@ alias gac='gc --amend -Chead'
 alias reload="source ~/.bash_profile"
 alias rjw="rake jobs:work"
 alias d="script/dev"
+alias hcurl='curl -n -H "Accept: application/vnd.heroku+json; version=3"'
 
 alias flushdns="sudo killall -HUP mDNSResponder"
 
