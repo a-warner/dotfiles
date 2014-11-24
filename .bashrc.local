@@ -26,6 +26,7 @@ alias grpe=grep
 alias grep='grep --color=auto'
 alias igrep="grep -i"
 alias lgrep="grep --line-buffered"
+alias lr='ls -lrta'
 alias rdm="rake db:migrate"
 alias rdr="rake db:rollback"
 alias gphm="git push heroku master"
