@@ -36,7 +36,7 @@ alias rjw="rake jobs:work"
 alias d="script/dev"
 alias hcurl='curl -n -H "Accept: application/vnd.heroku+json; version=3"'
 
-alias flushdns="sudo killall -HUP mDNSResponder"
+alias flushdns="sudo discoveryutil mdnsflushcache"
 
 # pushes a new branch to origin, sets it up to track
 # the remote
