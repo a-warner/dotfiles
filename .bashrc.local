@@ -95,5 +95,7 @@ if [[ -f ~/.secret_env.rc ]]; then
   . ~/.secret_env.rc
 fi
 
-shopt -s histappend
-export PROMPT_COMMAND="$( [ '$PROMPT_COMMAND' ] && echo $PROMPT_COMMAND; )history -a; history -n"
+if [[ $(ps -o comm= -p $PPID) != *sh ]]; then
+  shopt -s histappend
+  export PROMPT_COMMAND="$( [ '$PROMPT_COMMAND' ] && echo $PROMPT_COMMAND; )history -a; history -n"
+fi
