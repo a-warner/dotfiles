@@ -117,7 +117,7 @@ end
 if Object.const_defined?('IRB')
   IRB.conf[:IRB_RC] = after_rails_loaded
 else
-  after_rails_loaded.call
+  Pry.hooks.add_hook(:when_started, :add_rails_helpers, after_rails_loaded)
 end
 
 def benchmark(&block)
