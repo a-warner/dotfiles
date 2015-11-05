@@ -1,10 +1,10 @@
 server {
   listen       443 ssl;
-  server_name  *.dev;
+  server_name  SERVER_NAME_FIELD *.SERVER_NAME_FIELD;
 
   ssl                  on;
-  ssl_certificate      ssl/powdev.crt;
-  ssl_certificate_key  ssl/powdev.key;
+  ssl_certificate      ssl/SERVER_NAME_FIELD.crt;
+  ssl_certificate_key  ssl/SERVER_NAME_FIELD.key;
 
   keepalive_timeout 5;
 
