@@ -1,6 +1,5 @@
-[[ -r $rvm_path/scripts/completion ]] && source $rvm_path/scripts/completion
-if [[ -s "$HOME/.rvm/scripts/rvm" ]] ; then source "$HOME/.rvm/scripts/rvm" ; fi
 export PATH=$PATH:./node_modules/.bin:/usr/local/share/npm/bin:$WORKSPACE_DIR/dotfiles/bin
+eval "$(rbenv init -)"
 
 # python crap
 export WORKON_HOME=$HOME/.virtualenvs
