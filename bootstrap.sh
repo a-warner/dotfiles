@@ -91,7 +91,7 @@ fi
 brew update
 
 echo "Homebrew is installing standard packages..."
-for app in ack ctags-exuberant imagemagick macvim markdown proctools wget grep hub ngrep git node tree caskroom/cask/brew-cask postgresql rbenv ruby-build; do
+for app in ack ctags-exuberant imagemagick macvim markdown proctools wget grep hub ngrep git node tree caskroom/cask/brew-cask postgresql redis memcached rbenv ruby-build; do
   brew list $app > /dev/null
   if [[ "$?" -eq "1" ]]; then
     brew install $app
@@ -167,6 +167,14 @@ gem: --no-ri --no-rdoc
 - https://rubygems.org
 :backtrace: false
 GEMRC
+
+echo "Starting datastores now and ensuring they start by default..."
+ln -sfv /usr/local/opt/postgresql/*.plist ~/Library/LaunchAgents &> /dev/null
+launchctl load ~/Library/LaunchAgents/homebrew.mxcl.memcached.plist &> /dev/null
+ln -sfv /usr/local/opt/redis/*.plist ~/Library/LaunchAgents &> /dev/null
+launchctl load ~/Library/LaunchAgents/homebrew.mxcl.redis.plist &> /dev/null
+launchctl load ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist &> /dev/null
+ln -sfv /usr/local/opt/memcached/*.plist ~/Library/LaunchAgents &> /dev/null
 
 source $HOME/.bash_profile
 echo "Finished."
