@@ -107,6 +107,8 @@ for app in java slack dropbox sizeup jing flux clipmenu spotify skype vlc virtua
 done
 
 echo "Installing latest ruby..."
+git clone https://github.com/sstephenson/rbenv-gem-rehash.git $HOME/.rbenv/plugins/rbenv-gem-rehash
+
 rbenv versions | grep -q 2.2.3
 if [ "$?" -ne "0" ]; then
   rbenv install 2.2.3
