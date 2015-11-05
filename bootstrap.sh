@@ -178,6 +178,12 @@ launchctl load ~/Library/LaunchAgents/homebrew.mxcl.redis.plist &> /dev/null
 launchctl load ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist &> /dev/null
 ln -sfv /usr/local/opt/memcached/*.plist ~/Library/LaunchAgents &> /dev/null
 
+echo "Setting a shorter Delay until key repeat..."
+defaults write NSGlobalDomain InitialKeyRepeat -int 12
+
+echo "Setting a blazingly fast keyboard repeat rate..."
+defaults write NSGlobalDomain KeyRepeat -int 0
+
 source $HOME/.bash_profile
 echo "Finished."
 
