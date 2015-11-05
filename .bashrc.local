@@ -97,7 +97,7 @@ fi
 
 if [[ $(ps -o comm= -p $PPID) != *sh ]]; then
   shopt -s histappend
-  export PROMPT_COMMAND="$( [ '$PROMPT_COMMAND' ] && echo $PROMPT_COMMAND; )history -a; history -n"
+  export PROMPT_COMMAND="$( [ '$PROMPT_COMMAND' ] && echo $PROMPT_COMMAND; ) history -a; history -n"
 fi
 
 export ANDROID_HOME=/usr/local/opt/android-sdk
