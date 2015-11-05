@@ -13,17 +13,19 @@
 #   your own risk.
 # License: See below
 
-xcode-select --print-path &> /dev/null
+xcode-select -p &> /dev/null
 if [ ["$?" -ne "0"] -a [! -f "/Developer/Library/uninstall-devtools"] ]; then
   read -p "Please install Xcode and re-run this script"
   exit 0
 fi
 
+sudo xcodebuild -license
+
 if [ -n "$WORKSPACE_DIR" ]; then
   # don't let them change it if it's already set
   DEFAULT_WORKING_DIRECTORY=$WORKSPACE_DIR
 else
-  DEFAULT_WORKING_DIRECTORY=$HOME/workspace
+  DEFAULT_WORKING_DIRECTORY=$HOME/src
   echo "Please enter your local working directory (or hit Return to stick with '$DEFAULT_WORKING_DIRECTORY')"
   read working_dir
 fi
@@ -61,11 +63,6 @@ else
   echo "Not changing host name"
 fi
 
-echo "Checking java installation; please follow any prompts to install"
-java 2>&1 > /dev/null
-# I'm pretty sure this just installs java if it's not installed
-# TODO: fix this if it doesn't work on a new machine
-
 if [ ! -f "$HOME/.ssh/id_rsa.pub" ]; then
   echo "Please enter your email: "
   read email
@@ -75,13 +72,6 @@ fi
 
 cat $HOME/.ssh/id_rsa.pub | pbcopy
 read -p "Your public ssh key is in your pasteboard. Add it to github.com if it's not already there and hit Return"
-
-grep "streams=no" $HOME/Library/Preferences/nsmb.conf > /dev/null
-if [[ "$?" -ne "0" ]]; then
-  echo "Fixing samba streams on OS X"
-  echo "[default]" >  $HOME/Library/Preferences/nsmb.conf
-  echo "streams=no" >> $HOME/Library/Preferences/nsmb.conf
-fi
 
 echo "Removing system gems"
 sudo -i 'gem update --system'
@@ -95,18 +85,33 @@ fi
 
 if ! command -v brew > /dev/null; then
   echo "Installing homebrew"
-  sudo mkdir /usr/local > /dev/null
-  sudo chown -R `whoami` /usr/local
-  curl -L https://github.com/mxcl/homebrew/tarball/master | tar xz --strip 1 -C /usr/local
+  ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 fi
 
-echo "Homebrew is standard packages..."
-for app in ack ctags-exuberant imagemagick macvim markdown proctools wget grep hub ngrep git node tree; do
+brew update
+
+echo "Homebrew is installing standard packages..."
+for app in ack ctags-exuberant imagemagick macvim markdown proctools wget grep hub ngrep git node tree caskroom/cask/brew-cask postgresql rbenv ruby-build; do
   brew list $app > /dev/null
   if [[ "$?" -eq "1" ]]; then
     brew install $app
   fi
 done
+
+echo "Homebrew cask is installing standard packages..."
+for app in java slack dropbox sizeup jing flux clipmenu spotify skype vlc virtualbox; do
+  brew cask list $app > /dev/null
+  if [[ "$?" -eq "1" ]]; then
+    brew cask install $app
+  fi
+done
+
+echo "Installing latest ruby..."
+rbenv versions | grep -q 2.2.3
+if [ "$?" -ne "0" ]; then
+  rbenv install 2.2.3
+fi
+rbenv global 2.2.3
 
 echo "Preparing system for dotfiles"
 
@@ -150,34 +155,6 @@ done
 echo "Installing vimbundles..."
 sh $DOTMATRIX_LOCATION/bin/vimbundles.sh
 
-if [ ! -d $HOME/.rvm ]; then
-  echo "Building rvm"
-  curl -s https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer -o rvm-installer
-  chmod +x rvm-installer
-  ./rvm-installer --version head
-  rm rvm-installer
-  source "$HOME/.rvm/scripts/rvm"
-fi
-
-chmod +x $HOME/.rvm/hooks/after_cd_bundler
-
-echo "Declare global gems"
-GLOBAL_GEM_FILE=$HOME/.rvm/gemsets/global.gems
-test -f $GLOBAL_GEM_FILE || touch $GLOBAL_GEM_FILE
-for gem in hitch dirty github; do
-  grep $gem $GLOBAL_GEM_FILE > /dev/null
-  if [[ "$?" -ne "0" ]]; then
-    echo "$gem" >> $GLOBAL_GEM_FILE
-  fi
-done
-
-rvm list strings | grep ruby-1.9.3 > /dev/null
-if [[ "$?" -ne "0" ]]; then
-  echo "rvm is installing ruby 1.9.3"
-  rvm install 1.9.3 -C --enable-shared=yes
-  rvm use 1.9.3 --default
-fi
-
 echo "Writing .gemrc"
 cat > $HOME/.gemrc <<GEMRC
 ---
@@ -187,25 +164,9 @@ gem: --no-ri --no-rdoc
 :bulk_threshold: 1000
 :verbose: true
 :sources:
-- http://rubygems.org
+- https://rubygems.org
 :backtrace: false
 GEMRC
-
-brew list postgresql > /dev/null
-if [[ "$?" -eq "1" ]]; then
-  echo "Installing PostgreSQL"
-  brew install postgresql
-  brew cleanup; brew prune
-  POSTGRESQL_VERSION=$(brew list postgresql | awk -F/ '{print $6}' | head -n 1)
-  test -d /usr/local/var/postgres || initdb /usr/local/var/postgres
-  test -d $HOME/Library/LaunchAgents || mkdir -p $HOME/Library/LaunchAgents
-  test -f $HOME/Library/LaunchAgents/org.postgresql.postgres.plist &&
-    launchctl unload -w $HOME/Library/LaunchAgents/org.postgresql.postgres.plist
-  cp -f /usr/local/Cellar/postgresql/$POSTGRESQL_VERSION/org.postgresql.postgres.plist $HOME/Library/LaunchAgents/
-  launchctl load -w $HOME/Library/LaunchAgents/org.postgresql.postgres.plist
-else
-  echo "PostgreSQL already installed"
-fi
 
 source $HOME/.bash_profile
 echo "Finished."
