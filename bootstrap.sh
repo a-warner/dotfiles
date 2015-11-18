@@ -99,7 +99,7 @@ for app in ack ctags-exuberant imagemagick macvim markdown proctools wget grep h
 done
 
 echo "Homebrew cask is installing standard packages..."
-for app in java slack dropbox sizeup jing flux clipmenu spotify skype vlc virtualbox evernote; do
+for app in java slack dropbox sizeup jing flux clipmenu spotify skype vlc virtualbox evernote heroku-toolbelt; do
   brew cask list $app > /dev/null
   if [[ "$?" -eq "1" ]]; then
     brew cask install $app
