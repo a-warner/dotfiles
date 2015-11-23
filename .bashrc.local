@@ -38,6 +38,8 @@ alias hcurl='curl -n -H "Accept: application/vnd.heroku+json; version=3"'
 
 alias flushdns="sudo discoveryutil mdnsflushcache"
 
+alias isim="open /Applications/Xcode.app/Contents/Developer/Applications/Simulator.app"
+
 # pushes a new branch to origin, sets it up to track
 # the remote
 gpnb() {
