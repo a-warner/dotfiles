@@ -91,12 +91,17 @@ fi
 brew update
 
 echo "Homebrew is installing standard packages..."
-for app in ack ctags-exuberant imagemagick macvim markdown proctools wget grep hub ngrep git node tree caskroom/cask/brew-cask postgresql redis memcached rbenv ruby-build rbenv-bundler icu4c nginx watchman; do
+for app in ack ctags-exuberant imagemagick macvim markdown proctools wget hub ngrep git node tree caskroom/cask/brew-cask postgresql redis memcached rbenv ruby-build rbenv-bundler icu4c nginx watchman; do
   brew list $app > /dev/null
   if [[ "$?" -eq "1" ]]; then
     brew install $app
   fi
 done
+
+brew list homebrew/dupes/grep
+if [[ "$?" -eq "1"]]; then
+  brew install homebrew/dupes/grep --with-default-names
+fi
 
 echo "Homebrew cask is installing standard packages..."
 for app in java slack dropbox sizeup jing flux clipmenu spotify skype vlc virtualbox evernote heroku-toolbelt; do
