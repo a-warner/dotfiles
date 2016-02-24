@@ -114,10 +114,10 @@ after_rails_loaded = lambda do |*args|
   end
 end
 
-if Object.const_defined?('IRB')
-  IRB.conf[:IRB_RC] = after_rails_loaded
-else
+if defined?(Pry)
   Pry.hooks.add_hook(:when_started, :add_rails_helpers, after_rails_loaded)
+elsif Object.const_defined?('IRB')
+  IRB.conf[:IRB_RC] = after_rails_loaded
 end
 
 def benchmark(&block)
