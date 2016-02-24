@@ -91,7 +91,7 @@ fi
 brew update
 
 echo "Homebrew is installing standard packages..."
-for app in ack ctags-exuberant imagemagick macvim markdown proctools wget hub ngrep git node tree caskroom/cask/brew-cask postgresql redis memcached rbenv ruby-build rbenv-bundler icu4c nginx watchman colordiff; do
+for app in ack ctags-exuberant imagemagick macvim markdown proctools wget grep hub ngrep git node tree caskroom/cask/brew-cask postgresql redis memcached rbenv ruby-build rbenv-bundler icu4c nginx watchman colordiff diff-so-fancy; do
   brew list $app > /dev/null
   if [[ "$?" -eq "1" ]]; then
     brew install $app
@@ -188,6 +188,10 @@ defaults write NSGlobalDomain InitialKeyRepeat -int 12
 
 echo "Setting a blazingly fast keyboard repeat rate..."
 defaults write NSGlobalDomain KeyRepeat -int 0
+
+echo "Setting up git diff-so-fancy"
+git config --global pager.diff "diff-so-fancy | less --tabs=1,5 -RFX"
+git config --global pager.show "diff-so-fancy | less --tabs=1,5 -RFX"
 
 source $HOME/.bash_profile
 echo "Finished."
