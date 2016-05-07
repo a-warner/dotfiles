@@ -104,7 +104,7 @@ if [[ "$?" -eq "1"]]; then
 fi
 
 echo "Homebrew cask is installing standard packages..."
-for app in java slack dropbox sizeup jing flux clipmenu spotify skype vlc virtualbox evernote heroku-toolbelt firefox google-chrome; do
+for app in java slack dropbox sizeup jing flux clipmenu spotify skype vlc virtualbox evernote heroku-toolbelt firefox google-chrome tidal; do
   brew cask list $app > /dev/null
   if [[ "$?" -eq "1" ]]; then
     brew cask install $app
