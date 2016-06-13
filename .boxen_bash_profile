@@ -1,4 +1,5 @@
 . "$HOME/.profile"
 export WORKSPACE_DIR=$BOXEN_SRC_DIR
 export HASHROCKET_DIR=$WORKSPACE_DIR
+export RAPGENIUS_DATABASE_BACKUP_DIR=$HOME/"Dropbox (Genius)/rap-genius-database-backups"
 . "$HOME/.bashrc"
