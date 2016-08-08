@@ -96,10 +96,9 @@ after_rails_loaded = lambda do |*args|
 
           f.puts '<meta http-equiv="Content-type" content="text/html; charset=utf-8"></meta>'
           f.puts "<pre>"
-            f.puts h "From: #{self['from']}"
-            f.puts h "Subject: #{subject}"
-            f.puts h "Date: #{date}"
-            f.puts h "To: #{self['to']}"
+            header.each do |k, v|
+              f.puts h "#{k}: #{v}"
+            end
             f.puts h "Smtp_envelope_to: #{smtp_envelope_to}" if defined?(smtp_envelope_to)
             ['cc', 'bcc', 'reply-to'].each do |optional_recipients|
               if self[optional_recipients].present?
