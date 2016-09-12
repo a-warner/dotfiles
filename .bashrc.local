@@ -39,6 +39,7 @@ alias hcurl='curl -n -H "Accept: application/vnd.heroku+json; version=3"'
 alias flushdns="sudo discoveryutil mdnsflushcache"
 
 alias isim="open /Applications/Xcode.app/Contents/Developer/Applications/Simulator.app"
+alias gg="git pull --rebase && bundle && npm install && bundle exec rake db:migrate assets:clean assets:recompile cache:clear && script/dev console"
 
 # pushes a new branch to origin, sets it up to track
 # the remote
