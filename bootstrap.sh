@@ -114,6 +114,9 @@ done
 echo "Installing latest ruby..."
 git clone https://github.com/sstephenson/rbenv-gem-rehash.git $HOME/.rbenv/plugins/rbenv-gem-rehash
 
+test -d $HOME/.rbenv/plugins/rbenv-bundler-ruby-version || \
+  git clone https://github.com/aripollak/rbenv-bundler-ruby-version.git $HOME/.rbenv/plugins/rbenv-bundler-ruby-version
+
 rbenv versions | grep -q 2.2.3
 if [ "$?" -ne "0" ]; then
   rbenv install 2.2.3
