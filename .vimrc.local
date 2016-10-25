@@ -21,3 +21,8 @@ let g:ctrlp_custom_ignore = {
 
 autocmd FileType ruby setlocal shiftwidth=2 softtabstop=2 expandtab autoindent
 autocmd FileType javascript setlocal shiftwidth=2 softtabstop=2 expandtab autoindent
+
+xmap \\  <Plug>Commentary<CR>
+nmap \\  <CR><Plug>Commentary
+nmap \\\ <Plug>CommentaryLine<CR>
+nmap \\u <Plug>CommentaryUndo<CR>
