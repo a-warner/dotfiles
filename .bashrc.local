@@ -104,3 +104,10 @@ if [[ $(ps -o comm= -p $PPID) != *sh ]]; then
 fi
 
 export ANDROID_HOME=/usr/local/opt/android-sdk
+
+if [ -n "$BOXEN_HOME" ]; then
+  export ANDROID_HOME=~/Library/Android/sdk
+fi
+
+export PATH=${PATH}:${ANDROID_HOME}/tools
+export PATH=${PATH}:${ANDROID_HOME}/platform-tools
