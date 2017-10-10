@@ -106,7 +106,7 @@ after_rails_loaded = lambda do |*args|
               end
             end
           f.puts "</pre>"
-          f.puts self.body
+          f.write self.body
         end
         system("open", "file:///#{mail_path}")
       end
