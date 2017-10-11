@@ -91,7 +91,7 @@ fi
 brew update
 
 echo "Homebrew is installing standard packages..."
-for app in ack ctags-exuberant imagemagick macvim markdown proctools wget grep hub ngrep git node tree caskroom/cask/brew-cask postgresql redis memcached rbenv ruby-build rbenv-bundler icu4c nginx watchman colordiff diff-so-fancy cloc yarn gsl; do
+for app in ack ctags-exuberant imagemagick macvim markdown proctools wget grep hub ngrep git node tree caskroom/cask/brew-cask postgresql redis memcached rbenv ruby-build rbenv-bundler icu4c nginx watchman colordiff diff-so-fancy cloc yarn gsl chromedriver; do
   brew list $app > /dev/null
   if [[ "$?" -eq "1" ]]; then
     brew install $app
