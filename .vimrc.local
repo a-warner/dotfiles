@@ -19,6 +19,10 @@ let g:ctrlp_custom_ignore = {
   \ 'file': '\v\.(exe|so|dll|DS_Store)$',
   \ }
 let g:ale_sign_column_always = 1
+let g:ale_linters = {
+  \   'javascript': ['eslint'],
+  \   'html': [],
+  \}
 
 autocmd FileType ruby setlocal shiftwidth=2 softtabstop=2 expandtab autoindent
 autocmd FileType javascript setlocal shiftwidth=2 softtabstop=2 expandtab autoindent
