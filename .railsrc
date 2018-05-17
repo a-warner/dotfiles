@@ -143,7 +143,10 @@ end
 def change_log(stream, colorize=true)
   ActiveRecord::Base.logger = ::Logger.new(stream)
   ActiveRecord::Base.clear_all_connections!
-  ActiveRecord::Base.colorize_logging = colorize
+
+  if ActiveRecord::Base.respond_to?(:colorize_logging=)
+    ActiveRecord::Base.colorize_logging = colorize
+  end
 end
 
 class Object
