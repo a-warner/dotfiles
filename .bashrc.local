@@ -1,5 +1,6 @@
 export PATH=$PATH:./node_modules/.bin:/usr/local/share/npm/bin:$WORKSPACE_DIR/dotfiles/bin
 eval "$(rbenv init -)"
+eval "$(nodenv init -)"
 rbenv bundler on &> /dev/null
 
 # python crap
