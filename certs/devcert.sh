@@ -2,10 +2,15 @@
 set -e
 
 DOMAIN=$1
+PORT=$2
 
 if [ -z "$DOMAIN" ]; then
-  echo "Usage: $0 DOMAIN_NAME"
+  echo "Usage: $0 DOMAIN_NAME [PORT]"
   exit 1
+fi
+
+if [[ ! -z "$PORT" ]]; then
+  PORTSUFFIX=:${PORT}
 fi
 
 sed "s/SERVER_NAME_FIELD/$DOMAIN/" openssl.cnf.template > ${DOMAIN}-openssl.cnf
@@ -17,7 +22,7 @@ mkdir -p /usr/local/etc/nginx/ssl
 cp $DOMAIN.key /usr/local/etc/nginx/ssl
 cp $DOMAIN.crt /usr/local/etc/nginx/ssl
 
-sed "s/SERVER_NAME_FIELD/$DOMAIN/" pow_nginx_config > /usr/local/etc/nginx/servers/$DOMAIN.dev
+sed "s/SERVER_NAME_FIELD/$DOMAIN/g" pow_nginx_config | sed "s/SERVER_PORT_FIELD/${PORTSUFFIX}/g" > /usr/local/etc/nginx/servers/$DOMAIN.test
 
-sudo nginx -s quit
+sudo nginx -s quit 2>/dev/null || true
 sudo nginx
