@@ -24,5 +24,4 @@ cp $DOMAIN.crt /usr/local/etc/nginx/ssl
 
 sed "s/SERVER_NAME_FIELD/$DOMAIN/g" pow_nginx_config | sed "s/SERVER_PORT_FIELD/${PORTSUFFIX}/g" > /usr/local/etc/nginx/servers/$DOMAIN.test
 
-sudo nginx -s quit 2>/dev/null || true
-sudo nginx
+sudo brew services restart nginx
