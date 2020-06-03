@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 # Development script for OS X
 # Origin Author: Rogelio J. Samour from https://gist.github.com/1347350
@@ -14,7 +14,7 @@
 # License: See below
 
 xcode-select -p &> /dev/null
-if [ ["$?" -ne "0"] -a [! -f "/Developer/Library/uninstall-devtools"] ]; then
+if [ [ "$?" -ne "0" ] -a [! test -f "/Developer/Library/uninstall-devtools" ] ]; then
   read -p "Please install Xcode and re-run this script"
   exit 0
 fi
@@ -73,10 +73,6 @@ fi
 cat $HOME/.ssh/id_rsa.pub | pbcopy
 read -p "Your public ssh key is in your pasteboard. Add it to github.com if it's not already there and hit Return"
 
-echo "Removing system gems"
-sudo -i 'gem update --system'
-sudo -i 'gem clean'
-
 grep '. "$HOME/.bashrc"' $HOME/.bash_profile > /dev/null
 if [[ "$?" -ne "0" ]]; then
   echo "Making .bash_profile source .bashrc"
@@ -91,25 +87,22 @@ fi
 brew update
 
 echo "Homebrew is installing standard packages..."
-for app in ack ctags-exuberant imagemagick macvim markdown proctools wget grep hub ngrep git node tree caskroom/cask/brew-cask postgresql redis memcached rbenv ruby-build rbenv-bundler icu4c nginx watchman colordiff diff-so-fancy cloc yarn gsl chromedriver editorconfig; do
+for app in ack ctags-exuberant imagemagick macvim markdown proctools wget grep hub ngrep git node tree postgresql redis memcached rbenv ruby-build rbenv-bundler icu4c nginx watchman colordiff diff-so-fancy cloc yarn gsl editorconfig nodenv grep; do
   brew list $app > /dev/null
   if [[ "$?" -eq "1" ]]; then
     brew install $app
   fi
 done
 
-brew list homebrew/dupes/grep
-if [[ "$?" -eq "1"]]; then
-  brew install homebrew/dupes/grep --with-default-names
-fi
-
 echo "Homebrew cask is installing standard packages..."
-for app in java slack dropbox sizeup jing flux clipmenu spotify skype vlc virtualbox evernote heroku-toolbelt firefox google-chrome tidal handbrakecli origami-studio; do
+for app in java slack dropbox clipmenu spotify skype vlc virtualbox evernote firefox google-chrome tidal origami-studio chromedriver; do
   brew cask list $app > /dev/null
   if [[ "$?" -eq "1" ]]; then
     brew cask install $app
   fi
 done
+
+brew tap heroku/brew && brew install heroku
 
 echo "Installing latest ruby..."
 git clone https://github.com/sstephenson/rbenv-gem-rehash.git $HOME/.rbenv/plugins/rbenv-gem-rehash
@@ -117,11 +110,11 @@ git clone https://github.com/sstephenson/rbenv-gem-rehash.git $HOME/.rbenv/plugi
 test -d $HOME/.rbenv/plugins/rbenv-bundler-ruby-version || \
   git clone https://github.com/aripollak/rbenv-bundler-ruby-version.git $HOME/.rbenv/plugins/rbenv-bundler-ruby-version
 
-rbenv versions | grep -q 2.2.3
+rbenv versions | grep -q 2.7.1
 if [ "$?" -ne "0" ]; then
-  rbenv install 2.2.3
+  rbenv install 2.7.1
 fi
-rbenv global 2.2.3
+rbenv global 2.7.1
 
 echo "Preparing system for dotfiles"
 
@@ -179,6 +172,7 @@ gem: --no-ri --no-rdoc
 GEMRC
 
 echo "Starting datastores now and ensuring they start by default..."
+mkdir -p ~/Library/LaunchAgents &> /dev/null
 ln -sfv /usr/local/opt/postgresql/*.plist ~/Library/LaunchAgents &> /dev/null
 launchctl load ~/Library/LaunchAgents/homebrew.mxcl.memcached.plist &> /dev/null
 ln -sfv /usr/local/opt/redis/*.plist ~/Library/LaunchAgents &> /dev/null

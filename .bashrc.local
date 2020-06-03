@@ -113,3 +113,4 @@ fi
 
 export PATH=${PATH}:${ANDROID_HOME}/tools
 export PATH=${PATH}:${ANDROID_HOME}/platform-tools
+export BASH_SILENCE_DEPRECATION_WARNING=1
