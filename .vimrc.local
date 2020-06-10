@@ -31,3 +31,5 @@ xmap \\  <Plug>Commentary<CR>
 nmap \\  <CR><Plug>Commentary
 nmap \\\ <Plug>CommentaryLine<CR>
 nmap \\u <Plug>CommentaryUndo<CR>
+
+:set tags^=./.git/tags;`
