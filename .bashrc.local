@@ -1,25 +1,121 @@
-export PATH=$PATH:./node_modules/.bin:/usr/local/share/npm/bin:$WORKSPACE_DIR/dotfiles/bin
-eval "$(rbenv init -)"
-eval "$(nodenv init -)"
-rbenv bundler on &> /dev/null
+# Copied from dotmatrix hashrc
 
-# python crap
-export WORKON_HOME=$HOME/.virtualenvs
-export PIP_VIRTUALENV_BASE=$WORKON_HOME
-export PIP_RESPECT_VIRTUALENV=true
+alias ll='ls -l'
 
-r () {
-  local SCRIPT_NAME=$1
-  shift
-  if [[ -f script/$SCRIPT_NAME ]]; then
-    script/$SCRIPT_NAME $@
-  else
-    echo "No script at script/$SCRIPT_NAME"
+# git_prompt_info accepts 0 or 1 arguments (i.e., format string)
+# returns text to add to bash PS1 prompt (includes branch name)
+git_prompt_info () {
+  local g="$(git rev-parse --git-dir 2>/dev/null)"
+  if [ -n "$g" ]; then
+    local r
+    local b
+    local d
+    local s
+    # Rebasing
+    if [ -d "$g/rebase-apply" ] ; then
+      if test -f "$g/rebase-apply/rebasing" ; then
+        r="|REBASE"
+      fi
+      b="$(git symbolic-ref HEAD 2>/dev/null)"
+    # Interactive rebase
+    elif [ -f "$g/rebase-merge/interactive" ] ; then
+      r="|REBASE-i"
+      b="$(cat "$g/rebase-merge/head-name")"
+    # Merging
+    elif [ -f "$g/MERGE_HEAD" ] ; then
+      r="|MERGING"
+      b="$(git symbolic-ref HEAD 2>/dev/null)"
+    else
+      if [ -f "$g/BISECT_LOG" ] ; then
+        r="|BISECTING"
+      fi
+      if ! b="$(git symbolic-ref HEAD 2>/dev/null)" ; then
+        if ! b="$(git describe --exact-match HEAD 2>/dev/null)" ; then
+          b="$(cut -c1-7 "$g/HEAD")..."
+        fi
+      fi
+    fi
+
+    # Dirty Branch
+    local newfile='?? '
+    if [ -n "$ZSH_VERSION" ]; then
+      newfile='\?\? '
+    fi
+    d=''
+    s=$(git status --porcelain 2> /dev/null)
+    [[ $s =~ "$newfile" ]] && d+='+'
+    [[ $s =~ "M " ]] && d+='*'
+    [[ $s =~ "D " ]] && d+='-'
+
+    printf "${1-"(%s) "}" "${b##refs/heads/}$r$d"
   fi
 }
-complete -o default -W "\$(ls script)" r
 
-alias srvm="source .rvmrc"
+gco () {
+  if [[ $1 == '.' ]]; then
+    git add -A
+    git commit -m "CHECKING OUT CURRENT DIRECTORY" -q
+    git reset HEAD^ -q
+    git checkout .
+  else
+    git checkout "$@"
+  fi
+}
+
+alias gap='git add -p'
+alias gnap='git add -N . && git add -p'
+alias gb='git branch'
+alias gc='git commit -v'
+alias gca='git commit -a -v'
+alias gd='git diff'
+alias gdc='git diff --cached'
+alias gdh='git diff HEAD'
+alias gl='git pull'
+alias glod='git log --oneline --decorate'
+alias gln="git ln | perl -ple 's/\*/sprintf(\"%2s\", \$n++)/e' | less"
+alias gp='git push'
+alias gpr='git pull --rebase'
+alias gst='git status'
+alias gr='git rebase'
+alias grc='git rebase --continue'
+alias gra='git rebase --abort'
+alias reset-authors='git commit --amend --reset-author -C HEAD'
+alias vi='vim'
+
+# from dotmatrix bashrc
+
+# Store 10,000 history entries
+export HISTSIZE=10000
+# Don't store duplicates
+export HISTCONTROL=erasedups
+# Append to history file
+shopt -s histappend
+
+VISUAL=vim
+EDITOR="$VISUAL"
+LESS="FRX"
+RI="--format ansi -T"
+PSQL_EDITOR='vim -c"setf sql"'
+CLICOLOR=1
+LSCOLORS=gxgxcxdxbxegedabagacad
+
+export VISUAL EDITOR LESS RI PSQL_EDITOR CLICOLOR LSCOLORS
+
+bind 'set bind-tty-special-chars off'
+bind '"\ep": history-search-backward'
+bind '"\en": history-search-forward'
+bind '"\C-w": backward-kill-word'
+
+export HISTIGNORE="%*"
+bind '"\C-q": "%-\n"'
+
+[ -z "$PS1" ] || stty -ixon
+
+[ -z "$PS1" ] || export PS1="\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;36m\]\w\[\033[00m\]\$(git_prompt_info '(%s)')\n$ "
+
+
+# salvaged from my old bashrc
+
 alias gsp="git stash pop"
 alias gs="git stash"
 alias gpl="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
@@ -33,15 +129,7 @@ alias rdr="bundle exec rake db:rollback"
 alias gphm="git push heroku master"
 alias gac='gc --amend -Chead'
 alias reload="source ~/.bash_profile"
-alias rjw="rake jobs:work"
-alias d="script/dev"
-alias herocurl='curl -n -H "Accept: application/vnd.heroku+json; version=3"'
 alias hcurl='curl -o /dev/null -s -D - '
-
-alias flushdns="sudo killall -HUP mDNSResponder"
-
-alias isim="open /Applications/Xcode.app/Contents/Developer/Applications/Simulator.app"
-alias gg="git pull --rebase && bundle && yarn install && bundle exec rake db:migrate assets:clean assets:recompile cache:clear && script/dev console"
 
 # pushes a new branch to origin, sets it up to track
 # the remote
@@ -91,26 +179,7 @@ getpull() {
 
 complete -o default -W "\$(git branch 2>/dev/null | cut -c 3-)" git gco
 
-restart_memcached() {
-  ps -ef | grep memcached | grep -v grep | awk '{print $2}' | xargs -I {} kill -9 {}
-  memcached -d -m 1024
-}
-
-if [[ -f ~/.secret_env.rc ]]; then
-  . ~/.secret_env.rc
-fi
-
 if [[ $(ps -o comm= -p $PPID) != *sh ]]; then
   shopt -s histappend
   export PROMPT_COMMAND="$( [ '$PROMPT_COMMAND' ] && echo $PROMPT_COMMAND; ) history -a; history -n"
 fi
-
-export ANDROID_HOME=/usr/local/opt/android-sdk
-
-if [ -n "$BOXEN_HOME" ]; then
-  export ANDROID_HOME=~/Library/Android/sdk
-fi
-
-export PATH=${PATH}:${ANDROID_HOME}/tools
-export PATH=${PATH}:${ANDROID_HOME}/platform-tools
-export BASH_SILENCE_DEPRECATION_WARNING=1
