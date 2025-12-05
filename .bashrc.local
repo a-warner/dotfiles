@@ -84,13 +84,6 @@ alias vi='vim'
 
 # from dotmatrix bashrc
 
-# Store 10,000 history entries
-export HISTSIZE=10000
-# Don't store duplicates
-export HISTCONTROL=erasedups
-# Append to history file
-shopt -s histappend
-
 VISUAL=vim
 EDITOR="$VISUAL"
 LESS="FRX"
@@ -106,7 +99,6 @@ bind '"\ep": history-search-backward'
 bind '"\en": history-search-forward'
 bind '"\C-w": backward-kill-word'
 
-export HISTIGNORE="%*"
 bind '"\C-q": "%-\n"'
 
 [ -z "$PS1" ] || stty -ixon
@@ -183,3 +175,25 @@ if [[ $(ps -o comm= -p $PPID) != *sh ]]; then
   shopt -s histappend
   export PROMPT_COMMAND="$( [ '$PROMPT_COMMAND' ] && echo $PROMPT_COMMAND; ) history -a; history -n"
 fi
+
+# Huge history sizes
+HISTSIZE=1000000000
+HISTFILESIZE=1000000000
+HISTFILE=~/.bash_history
+
+# Avoid storing duplicates and space-prefixed commands
+HISTCONTROL=ignoredups:ignorespace
+
+# Append to history instead of overwriting
+shopt -s histappend
+
+# After each command:
+#   - history -a  -> append this session’s command to history file
+#   - history -n  -> reload new lines from other terminals
+if [[ -z "$PROMPT_COMMAND" ]]; then
+    PROMPT_COMMAND="history -a; history -n"
+else
+    PROMPT_COMMAND="$PROMPT_COMMAND"$'\n'"history -a; history -n"
+fi
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash

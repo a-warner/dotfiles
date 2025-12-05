@@ -1,7 +1,6 @@
 :set incsearch
 :set softtabstop=2 shiftwidth=2
 :set autoindent
-:colorscheme candycode
 :set guifont=Hack:h16
 :set tabstop=2
 :set binary
