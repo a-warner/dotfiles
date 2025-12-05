@@ -1,3 +1,8 @@
+syntax on
+filetype on
+filetype plugin on
+filetype indent on
+
 :set incsearch
 :set softtabstop=2 shiftwidth=2
 :set autoindent
